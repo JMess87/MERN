@@ -11,6 +11,9 @@ const { typeDefs, resolvers } = require('./schemas');
 // connection to the mongo db
 const db = require('./config/connection');
 
+const { authMiddleware } = require('./utils/auth');
+
+
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
   context: authMiddleware,

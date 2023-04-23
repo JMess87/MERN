@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
+import {Container, Card, Button } from 'react-bootstrap';
 
 // import { getMe, deleteBook } from '../utils/API';
 
@@ -13,7 +13,7 @@ import { useMutation } from '@apollo/client';
 import { REMOVE_BOOK } from '../utils/mutations';
 
 const SavedBooks = () => {
-  const { loading, data } = useQuery(GET_ME);
+  const { loading, userData } = useQuery(GET_ME);
   const [removeBook] = useMutation(REMOVE_BOOK);
 
   // use this to determine if `useEffect()` hook needs to run again
@@ -28,14 +28,13 @@ const SavedBooks = () => {
           return false;
         }
 
-        const response = await getMe(token);
-
+        const response = await GET_ME(token);
         if (!response.ok) {
           throw new Error('something went wrong!');
         }
 
         const user = await response.json();
-        setUserData(user);
+        getUserData(user);
       } catch (err) {
         console.error(err);
       }
@@ -60,7 +59,7 @@ const SavedBooks = () => {
       }
 
       const updatedUser = await response.json();
-      setUserData(updatedUser);
+      userData(updatedUser);
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
@@ -75,18 +74,18 @@ const SavedBooks = () => {
 
   return (
     <>
-      <Jumbotron fluid className='text-light bg-dark'>
+      <h1 fluid className='text-light bg-dark'>
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
-      </Jumbotron>
+      </h1>
       <Container>
         <h2>
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
-        <CardColumns>
+        <Container>
           {userData.savedBooks.map((book) => {
             return (
               <Card key={book.bookId} border='dark'>
@@ -102,7 +101,7 @@ const SavedBooks = () => {
               </Card>
             );
           })}
-        </CardColumns>
+        </Container>
       </Container>
     </>
   );

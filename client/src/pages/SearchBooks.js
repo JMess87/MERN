@@ -11,9 +11,6 @@ import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations';
 
 
-
-
-
 const SearchBooks = () => {
   // create state for holding returned google api data
   const [searchedBooks, setSearchedBooks] = useState([]);
@@ -43,8 +40,11 @@ const [saveBook] = useMutation(SAVE_BOOK);
       return false;
     }
 
-    try {
-      const response = await searchGoogleBooks(searchInput);
+    
+      try {
+        // const response = await searchGoogleBooks(searchInput);
+        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`);
+        console.log(response);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
@@ -95,7 +95,7 @@ const [saveBook] = useMutation(SAVE_BOOK);
 
   return (
     <>
-      <Jumbotron fluid className='text-light bg-dark'>
+      <h1 fluid className='text-light bg-dark'>
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>
@@ -118,7 +118,7 @@ const [saveBook] = useMutation(SAVE_BOOK);
             </Form.Row>
           </Form>
         </Container>
-      </Jumbotron>
+      </h1>
 
       <Container>
         <h2>
@@ -126,7 +126,7 @@ const [saveBook] = useMutation(SAVE_BOOK);
             ? `Viewing ${searchedBooks.length} results:`
             : 'Search for a book to begin'}
         </h2>
-        <CardColumns>
+        <Container>
           {searchedBooks.map((book) => {
             return (
               <Card key={book.bookId} border='dark'>
@@ -151,10 +151,10 @@ const [saveBook] = useMutation(SAVE_BOOK);
               </Card>
             );
           })}
-        </CardColumns>
+        </Container>
       </Container>
     </>
   );
 };
 
-export default SearchBooks;
+export default "SearchBooks";

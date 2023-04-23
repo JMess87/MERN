@@ -10,6 +10,7 @@ import {
   createHttpLink,
 } from '@apollo/client'; 
 import { setContext } from '@apollo/client/link/context';
+import { Switch } from 'react-router-dom/cjs/react-router-dom.min';
 
 // GQL Endpoint
 
@@ -41,22 +42,22 @@ const client = new ApolloClient({
 
 // Name a variable for auth
 
-function App() {
+
   function App() {
     return (
       <ApolloProvider client={client}>
         <Router>
           <>
             <Navbar />
-            <Routes>
+            <Switch>
               <Route path='/' component={SearchBooks} />
               <Route path='/saved' component={SavedBooks} />
               <Route render={() => <h1 className='display-2'>Wrong page!</h1>} />
-            </Routes>
+            </Switch>
           </>
         </Router>
       </ApolloProvider>
     );
   }
-}
+
   export default App;
